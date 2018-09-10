@@ -115,7 +115,7 @@ set mpv_options_full=dvdread dvdnav cdda #egl-angle #html-build ^
 set iniOptions=msys2Arch arch license2 vpx2 x2643 x2652 other265 flac fdkaac mediainfo ^
 soxB ffmpegB2 ffmpegUpdate ffmpegChoice mp4box rtmpdump mplayer2 mpv cores deleteSource ^
 strip pack logging bmx standalone updateSuite aom faac ffmbc curl cyanrip2 redshift rav1e ^
-ripgrep dav1d vvc jq dssim avs2 timeStamp noMintty svthevc svtav1
+ripgrep dav1d vvc jq dssim avs2 timeStamp noMintty svthevc svtav1 ffmpegPath
 
 set previousOptions=0
 set msys2ArchINI=0
@@ -154,6 +154,14 @@ if %deleteINI%==1 (
 :systemVars
 set msys2Arch=%msys2ArchINI%
 if %msys2Arch%==1 ( set "msys2=msys32") else set "msys2=msys64"
+
+:ffmpegPath
+set "writePath=no"
+if %ffmpegPathINI%==0 (
+    set ffmpegPath="https://git.ffmpeg.org/ffmpeg.git"
+    ) else set ffmpegPath=%ffmpegPathINI%
+if %deleteINI%==1 set "writePath=yes"
+if %writePath%==yes echo.ffmpegPath=%ffmpegPath%>>%ini%
 
 :selectSystem
 if %archINI%==0 (
@@ -1621,7 +1629,7 @@ set compileArgs=--cpuCount=%cpuCount% --build32=%build32% --build64=%build64% ^
 --logging=%logging% --bmx=%bmx% --standalone=%standalone% --aom=%aom% --faac=%faac% --ffmbc=%ffmbc% ^
 --curl=%curl% --cyanrip=%cyanrip% --redshift=%redshift% --rav1e=%rav1e% --ripgrep=%ripgrep% ^
 --dav1d=%dav1d% --vvc=%vvc% --jq=%jq% --dssim=%dssim% --avs2=%avs2% --timeStamp=%timeStamp% ^
---noMintty=%noMintty% --svthevc=%svthevc% --svtav1=%svtav1%
+--noMintty=%noMintty% --svthevc=%svthevc% --svtav1=%svtav1% --ffmpegPath=%ffmpegPath%
     set "msys2=%msys2%"
     set "noMintty=%noMintty%"
     if %build64%==yes ( set "MSYSTEM=MINGW64" ) else set "MSYSTEM=MINGW32"

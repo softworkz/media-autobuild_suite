@@ -35,6 +35,7 @@ while true; do
 --sox=* ) sox="${1#*=}"; shift ;;
 --ffmpeg=* ) ffmpeg="${1#*=}"; shift ;;
 --ffmpegUpdate=* ) ffmpegUpdate="${1#*=}"; shift ;;
+--ffmpegPath=* ) ffmpegPath="${1#*=}"; shift ;;
 --ffmpegChoice=* ) ffmpegChoice="${1#*=}"; shift ;;
 --mplayer=* ) mplayer="${1#*=}"; shift ;;
 --mpv=* ) mpv="${1#*=}"; shift ;;
@@ -1324,7 +1325,7 @@ if [[ $x264 != no ]]; then
         unset_extra_script
         if [[ $standalone = y && $x264 =~ (full|fullv) ]]; then
             _check=("$LOCALDESTDIR"/opt/lightffmpeg/lib/pkgconfig/libav{codec,format}.pc)
-            do_vcs "https://git.ffmpeg.org/ffmpeg.git"
+            do_vcs "$ffmpegPath"
             do_uninstall "$LOCALDESTDIR"/opt/lightffmpeg
             [[ -f "config.mak" ]] && log "distclean" make distclean
             create_build_dir light
@@ -1740,7 +1741,7 @@ if [[ $ffmpeg != "no" ]]; then
     # todo: make this more easily customizable
     [[ $ffmpegUpdate = y ]] && enabled_any lib{aom,tesseract,vmaf,x265,vpx} &&
         _deps=(lib{aom,tesseract,vmaf,x265,vpx}.a)
-    if do_vcs "https://git.ffmpeg.org/ffmpeg.git"; then
+    if do_vcs "$ffmpegPath"; then
 
         # See issue https://github.com/OpenVisualCloud/SVT-AV1/issues/567 for the reasons behind the follow codeblock:
         # start of SVT-AV1 temporary measures
@@ -1900,8 +1901,8 @@ if [[ $mplayer = "y" ]] &&
             git clone -q "$LOCALBUILDDIR/ffmpeg-git" ffmpeg; then
             cd_safe ffmpeg
             git checkout -qf --no-track -B master origin/HEAD
-            cd_safe ..
-        elif ! git clone "https://git.ffmpeg.org/ffmpeg.git" ffmpeg; then
+            popd >/dev/null
+        elif ! git clone "$ffmpegPath" ffmpeg; then
             rm -rf ffmpeg
             printf '%s\n' \
                 "Failed to get a FFmpeg checkout" \
@@ -2228,7 +2229,7 @@ if [[ $cyanrip = y ]]; then
     if do_vcs "https://github.com/atomnuker/cyanrip.git"; then
         old_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
         _check=("$LOCALDESTDIR"/opt/cyanffmpeg/lib/pkgconfig/libav{codec,format}.pc)
-        if flavor=cyan do_vcs "https://git.ffmpeg.org/ffmpeg.git"; then
+        if flavor=cyan do_vcs "$ffmpegPath"; then
             do_uninstall "$LOCALDESTDIR"/opt/cyanffmpeg
             [[ -f "config.mak" ]] && log "distclean" make distclean
             mapfile -t cyan_ffmpeg_opts < <(
