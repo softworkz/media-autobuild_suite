@@ -36,6 +36,7 @@ while true; do
 --sox=* ) sox="${1#*=}"; shift ;;
 --ffmpeg=* ) ffmpeg="${1#*=}"; shift ;;
 --ffmpegUpdate=* ) ffmpegUpdate="${1#*=}"; shift ;;
+--ffmpegPath=* ) ffmpegPath="${1#*=}"; shift ;;
 --ffmpegChoice=* ) ffmpegChoice="${1#*=}"; shift ;;
 --mplayer=* ) mplayer="${1#*=}"; shift ;;
 --mpv=* ) mpv="${1#*=}"; shift ;;
@@ -1129,7 +1130,7 @@ if [[ $x264 != no ]]; then
         PKG_CONFIG_PATH="$LOCALDESTDIR/opt/lightffmpeg/lib/pkgconfig:$MINGW_PREFIX/lib/pkgconfig"
         if [[ $standalone = y && $x264 =~ (full|fullv) ]]; then
             _check=("$LOCALDESTDIR"/opt/lightffmpeg/lib/pkgconfig/libav{codec,format}.pc)
-            do_vcs "https://git.ffmpeg.org/ffmpeg.git"
+            do_vcs "$ffmpegPath"
             do_uninstall "$LOCALDESTDIR"/opt/lightffmpeg
             [[ -f "config.mak" ]] && log "distclean" make distclean
             create_build_dir light
@@ -1503,7 +1504,7 @@ if [[ $ffmpeg != "no" ]]; then
     # todo: make this more easily customizable
     [[ $ffmpegUpdate = y ]] && enabled_any lib{aom,tesseract,vmaf,x265,vpx} &&
         _deps=(lib{aom,tesseract,vmaf,x265,vpx}.a)
-    if do_vcs "https://git.ffmpeg.org/ffmpeg.git"; then
+    if do_vcs "$ffmpegPath"; then
 
         do_changeFFmpegConfig "$license"
         [[ -f ffmpeg_extra.sh ]] && source ffmpeg_extra.sh
@@ -1609,7 +1610,7 @@ if [[ $mplayer = "y" ]] &&
             pushd ffmpeg >/dev/null
             git checkout -qf --no-track -B master origin/HEAD
             popd >/dev/null
-        elif ! git clone "https://git.ffmpeg.org/ffmpeg.git" ffmpeg; then
+        elif ! git clone "$ffmpegPath" ffmpeg; then
             rm -rf ffmpeg
             echo "Failed to get a FFmpeg checkout"
             echo "Please try again or put FFmpeg source code copy into ffmpeg/ manually."
@@ -1897,7 +1898,7 @@ if [[ $cyanrip = yes ]]; then
     if do_vcs "https://github.com/atomnuker/cyanrip.git"; then
         old_PKG_CONFIG_PATH="$PKG_CONFIG_PATH"
         _check=("$LOCALDESTDIR"/opt/cyanffmpeg/lib/pkgconfig/libav{codec,format}.pc)
-        if flavor=cyan do_vcs "https://git.ffmpeg.org/ffmpeg.git"; then
+        if flavor=cyan do_vcs "$ffmpegPath"; then
             do_uninstall "$LOCALDESTDIR"/opt/cyanffmpeg
             [[ -f "config.mak" ]] && log "distclean" make distclean
             create_build_dir cyan

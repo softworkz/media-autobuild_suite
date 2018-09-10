@@ -101,7 +101,7 @@ pdf-build libmpv-shared
 
 set iniOptions=msys2Arch arch license2 vpx2 x2643 x2652 other265 flac fdkaac mediainfo soxB ffmpegB2 ffmpegUpdate ^
 ffmpegChoice mp4box rtmpdump mplayer2 mpv cores deleteSource strip pack logging bmx standalone updateSuite ^
-aom faac ffmbc curl cyanrip2 redshift
+aom faac ffmbc curl cyanrip2 redshift ffmpegPath
 
 set previousOptions=0
 set msys2ArchINI=0
@@ -143,6 +143,14 @@ if %deleteINI%==1 (
 set msys2Arch=%msys2ArchINI%
 if %msys2Arch%==1 set "msys2=msys32"
 if %msys2Arch%==2 set "msys2=msys64"
+
+:ffmpegPath
+set "writePath=no"
+if %ffmpegPathINI%==0 (
+    set ffmpegPath="https://git.ffmpeg.org/ffmpeg.git"
+    ) else set ffmpegPath=%ffmpegPathINI%
+if %deleteINI%==1 set "writePath=yes"
+if %writePath%==yes echo.ffmpegPath=%ffmpegPath%>>%ini%
 
 :selectSystem
 set "writeArch=no"
@@ -1463,7 +1471,7 @@ MSYS2_PATH_TYPE=inherit MSYSTEM=%MSYSTEM% /usr/bin/bash --login ^
 --mediainfo=%mediainfo% --sox=%sox% --ffmpeg=%ffmpeg% --ffmpegUpdate=%ffmpegUpdate% --ffmpegChoice=%ffmpegChoice% ^
 --mplayer=%mplayer% --mpv=%mpv% --license=%license2%  --stripping=%stripFile% --packing=%packFile% ^
 --rtmpdump=%rtmpdump% --logging=%logging% --bmx=%bmx% --standalone=%standalone% --aom=%aom% ^
---faac=%faac% --ffmbc=%ffmbc% --curl=%curl% --cyanrip=%cyanrip% --redshift=%redshift%'
+--faac=%faac% --ffmbc=%ffmbc% --curl=%curl% --cyanrip=%cyanrip% --redshift=%redshift% --ffmpegPath=%ffmpegPath%'
 
 endlocal
 goto :EOF
