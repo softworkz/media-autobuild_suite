@@ -1462,6 +1462,15 @@ if [%build64%]==[yes] (
     set MSYSTEM=MINGW64
     ) else set MSYSTEM=MINGW32
 
+set nixdir=%instdir:\=/%
+set nixdir=%nixdir::=%
+	
+if [%ffmpegPath:~0,2%]==[..] (
+	set ffmpegPath=/%nixdir%/%ffmpegPath%
+	)
+	
+echo.ffmpegPath: %ffmpegPath%
+
 if not exist %build%\last_run if exist %build%\compile.log del %build%\compile.log
 start /I %instdir%\%msys2%\usr\bin\mintty.exe -i /msys2.ico -t "media-autobuild_suite" ^
 %instdir%\%msys2%\usr\bin\script.exe -a -q -f %build%\compile.log -c '^
