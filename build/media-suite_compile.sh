@@ -1549,7 +1549,7 @@ fi
 _check=(ffnvcodec/nvEncodeAPI.h)
 if [[ $ffmpeg != "no" ]] && { enabled ffnvcodec ||
     ! disabled_any ffnvcodec autodetect || ! mpv_disabled cuda-hwaccel; } &&
-    do_vcs "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git" ffnvcodec; then
+    do_vcs "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git#tag=n8.1.*" ffnvcodec; then
     do_makeinstall PREFIX="$LOCALDESTDIR"
     do_checkIfExist
 fi
