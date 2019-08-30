@@ -1288,22 +1288,22 @@ strip_ansi() {
 zip_logs() {
     local failed url files
     failed="$(get_first_subdir)"
-    pushd "$LOCALBUILDDIR" > /dev/null || do_exit_prompt "Did you delete /build?"
-    rm -f logs.zip
-    strip_ansi ./*.log
-    files=(/trunk/media-autobuild_suite.bat)
-    local option
-    [[ $failed ]] && mapfile -t -O "${#files[@]}" files < <(
-        find "$failed" -name "*.log"
-    )
-    mapfile -t -O "${#files[@]}" files < <(
-        find . -maxdepth 1 -name "*.stripped.log" -o -name "*_options.txt" -o -name "media-suite_*.sh" \
-            -o -name "last_run" -o -name "media-autobuild_suite.ini" -o -name "diagnostics.txt" -o -name "patchedFolders"
-    )
-    7za -mx=9 a logs.zip "${files[@]}" > /dev/null
-    [[ ! -f "$LOCALBUILDDIR/no_logs" ]] && [[ -n "$build32$build64" ]] &&
-        url="$(/usr/bin/curl -sF'file=@logs.zip' https://0x0.st)"
-    popd > /dev/null || do_exit_prompt "Did you delete the previous folder?"
+    pushd "$LOCALBUILDDIR" > /dev/null # || do_exit_prompt "Did you delete /build?"
+    # rm -f logs.zip
+    # strip_ansi ./*.log
+    # files=(/trunk/media-autobuild_suite.bat)
+    # local option
+    # [[ $failed ]] && mapfile -t -O "${#files[@]}" files < <(
+    #     find "$failed" -name "*.log"
+    # )
+    # mapfile -t -O "${#files[@]}" files < <(
+    #     find . -maxdepth 1 -name "*.stripped.log" -o -name "*_options.txt" -o -name "media-suite_*.sh" \
+    #         -o -name "last_run" -o -name "media-autobuild_suite.ini" -o -name "diagnostics.txt" -o -name "patchedFolders"
+    # )
+    # 7za -mx=9 a logs.zip "${files[@]}" > /dev/null
+    # [[ ! -f "$LOCALBUILDDIR/no_logs" ]] && [[ -n "$build32$build64" ]] &&
+    #     url="$(/usr/bin/curl -sF'file=@logs.zip' https://0x0.st)"
+    popd > /dev/null # || do_exit_prompt "Did you delete the previous folder?"
     echo
     if [[ $url ]]; then
         echo "${green}All relevant logs have been anonymously uploaded to $url"
