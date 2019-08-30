@@ -1610,6 +1610,15 @@ for /f "tokens=2" %%P in ('tasklist /v ^|findstr MABSbat') do set ourPID=%%P
 if exist %build%\compilation_failed del %build%\compilation_failed
 if exist %build%\fail_comp del %build%\compilation_failed
 
+set nixdir=%instdir:\=/%
+set nixdir=%nixdir::=%
+	
+if [%ffmpegPath:~0,2%]==[..] (
+	set ffmpegPath=/%nixdir%/%ffmpegPath%
+	)
+	
+echo.ffmpegPath: %ffmpegPath%
+
 REM Test mklink availability
 set symlinkSupport=""
 mkdir testmklink 2>NUL
